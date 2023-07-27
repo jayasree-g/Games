@@ -18,12 +18,14 @@ def snake_game():
     return "Game started"
 
 random_number = None
-print(random_number, "num")
 
 @app.route('/start_game', methods=['POST'])
 def start_game():
     global random_number
-    random_number = random.randint(1, 10)
+    start = request.json['start']
+    end = request.json['end']
+    random_number = random.randint(start, end)
+    print(start, end , random_number)
     return jsonify({'status': 'Game started!', 'number': random_number})
 
 @app.route('/check_guess', methods=['POST'])

@@ -14,6 +14,7 @@
     "react-bootstrap": "^2.8.0",
     "react-dom": "^18.2.0",
     "react-icons": "^4.10.1",
+    "react-modal": "^3.16.1",
     "react-router-dom": "^6.14.1",
     "react-scripts": "5.0.1",
     "react-typist": "^2.0.5",
@@ -48,9 +49,11 @@
   },
   "devDependencies": {
     "@reduxjs/toolkit": "^1.9.5",
+    "@types/react-modal": "^3.16.0",
     "@types/react-typist": "^2.0.3",
     "@types/redux-logger": "^3.0.9",
     "dotenv": "^16.3.1",
+    "mdb-react-ui-kit": "^6.1.0",
     "react-redux": "^8.1.1",
     "tailwindcss": "^3.3.3"
   }

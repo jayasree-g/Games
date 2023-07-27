@@ -1,14 +1,21 @@
 import React, { useState } from "react";
 import wizard from "./wizard.png";
+import Close from "../../images/close";
 
 export default function GuessTheNumber() {
   const [status, setStatus] = useState("Make a Guess!");
   const [guess, setGuess] = useState("");
   const [gameStarted, setGameStarted] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [range, setRange] = useState({ from: 1, to: 10 });
 
   const startGame = () => {
     fetch("http://localhost:5000/start_game", {
       method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ start: range.from, end: range.to }),
     })
       .then(() => {
         setGameStarted(true);
@@ -39,9 +46,77 @@ export default function GuessTheNumber() {
   return (
     <div
       className=" flex flex-col items-center h-screen relative"
-      style={{ backgroundColor: "#dfd9e2" }}
+      style={{
+        backgroundColor: `${modalOpen ? "#A9A9A9" : "#dfd9e2"}`,
+      }}
     >
       {/* #edd6f8 */}
+
+      <div
+        className={`absolute top-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-lg p-6 shadow-md ${
+          modalOpen ? "block" : "hidden"
+        }`}
+        style={{
+          width: "400px",
+          maxHeight: "80%",
+          overflow: "auto",
+          marginLeft: "25%",
+          backgroundColor: "#dfd9e2",
+        }}
+      >
+        <button
+          className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
+          onClick={() => setModalOpen(false)}
+        >
+          <Close />
+        </button>
+        <div>
+          <h2 className="text-xl font-semibold mt-4 mb-4">
+            Choose Guessing Range
+          </h2>
+          <div className="mb-4 flex flex-col gap-4">
+            <div className=" flex flex-col gap-2">
+              Choose Starting Number:
+              <input
+                value={range.from}
+                type="number"
+                onChange={(e) =>
+                  setRange({ ...range, from: parseInt(e.target.value) })
+                }
+                placeholder="1"
+                className="border border-gray-300 px-2 py-1"
+              />
+            </div>
+            <div>
+              Choose Ending Number:
+              <input
+                type="number"
+                value={range.to}
+                onChange={(e) =>
+                  setRange({ ...range, to: parseInt(e.target.value) })
+                }
+                placeholder="10"
+                className="border border-gray-300 px-2 py-1"
+              />
+            </div>
+          </div>
+          <button
+            onClick={() => {
+              startGame();
+              setModalOpen(false);
+            }}
+            className="text-xl font-semibold border p-2"
+            style={{
+              marginTop: "40px",
+              borderWidth: "2px",
+              borderColor: "#FFFEFC",
+            }}
+          >
+            Let's Go
+          </button>
+        </div>
+      </div>
+
       <div className=" font-semibold text-2xl" style={{ marginTop: "40px" }}>
         Welcome to the GuessTheNumber Game!
       </div>
@@ -52,7 +127,8 @@ export default function GuessTheNumber() {
           style={{ borderColor: "#7d5ba6", margin: "40px" }}
         >
           <div className=" font-semibold text-xl">
-            I am thinking of a number between 1-100. Can you guess it?
+            I am thinking of a number between {range.from}-{range.to}. Can you
+            guess it?
           </div>
           <div className=" font-semibold">{status}</div>
           <input
@@ -103,7 +179,7 @@ export default function GuessTheNumber() {
             </div>
           </div>
           <button
-            onClick={startGame}
+            onClick={() => setModalOpen(true)}
             className="text-xl font-semibold border p-2"
             style={{
               marginTop: "40px",
